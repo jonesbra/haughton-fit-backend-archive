@@ -1,7 +1,7 @@
 var http = require('http')
 var express = require('express')
 var app = express()
-var cors=require('cors')
+var cors = require('cors')
 var bodyParser = require('body-parser')
 var nodemailer = require('nodemailer')
 var fs = require('fs')
@@ -22,6 +22,26 @@ function sendComment (commentForm) {
 
   return new Promise(function(resolve, reject) {
     sendEmail(subject, commentForm.comment)
+      .then(function (msg) {
+        resolve(msg)
+      })
+      .catch(function (err) {
+        reject(err)
+      })
+  })
+}
+
+function sendPlan (planForm) {
+  var nameLine = 'Name: ' + planForm.name + '\n'
+  var emailLine = 'Email: ' + planForm.email + '\n'
+  var numberLine = 'Phone Number: ' + planForm.number + '\n\n'
+  var planLine = 'Selected Plan: ' + planForm.selectedPlan + ' Week'
+
+  var content = nameLine + emailLine + numberLine + planLine
+  var subject = 'Fitness Plan Request'
+
+  return new Promise(function(resolve, reject) {
+    sendEmail(subject, content)
       .then(function (msg) {
         resolve(msg)
       })
@@ -87,6 +107,16 @@ app.post('*', function(req, res) {
 
   if (req.url.includes('email') && req.url.includes('comment')) {
     sendComment(req.body)
+      .then(function (msg) {
+        console.log(msg)
+        res.status(200).end()
+      })
+      .catch(function (err) {
+        console.log(err)
+        res.status(500).end()
+      })
+  } else if (req.url.includes('email') && req.url.includes('plan')) {
+    sendPlan(req.body)
       .then(function (msg) {
         console.log(msg)
         res.status(200).end()
