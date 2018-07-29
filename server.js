@@ -35,7 +35,7 @@ function sendPlan (planForm) {
   var nameLine = 'Name: ' + planForm.name + '\n'
   var emailLine = 'Email: ' + planForm.email + '\n'
   var numberLine = 'Phone Number: ' + planForm.number + '\n\n'
-  var planLine = 'Selected Plan: ' + planForm.selectedPlan + ' Week'
+  var planLine = 'Selected Plan: ' + planForm.selectedPlan
 
   var content = nameLine + emailLine + numberLine + planLine
   var subject = 'Fitness Plan Request'
